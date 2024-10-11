@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'login_page.dart'; // واجهة تسجيل الدخول
-import 'fingerprint_auth_page.dart'; // واجهة التحقق من البصمة
-import 'voter_registration_page.dart'; // واجهة تسجيل الناخبين
-import 'voting_page.dart'; // واجهة التصويت
-import 'results_page.dart'; // واجهة عرض النتائج
-import 'settings_page.dart'; // واجهة إعدادات النظام
-import 'delete_voter_page.dart'; // واجهة حذف الناخبين
-import 'admin_home_page.dart'; // واجهة المشرف
-import 'voter_home_page.dart'; // واجهة الناخب
+import 'login_page.dart';
+import 'fingerprint_auth_page.dart';
+import 'voter_registration_page.dart';
+import 'voting_page.dart';
+import 'results_page.dart';
+import 'settings_page.dart';
+import 'delete_voter_page.dart';
+import 'admin_home_page.dart';
+import 'voter_home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,25 +24,21 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         useMaterial3: true,
       ),
-      initialRoute: '/', // الشاشة الأولى عند تشغيل التطبيق
+      initialRoute: '/',
       routes: {
-        '/': (context) => const LoginPage(), // واجهة تسجيل الدخول
-        '/fingerprint': (context) =>
-            const FingerprintAuthPage(), // واجهة التحقق من البصمة
-        '/register': (context) =>
-            const VoterRegistrationPage(), // واجهة تسجيل الناخبين
-        '/voting': (context) => const VotingPage(), // واجهة التصويت
-        '/results': (context) => const ResultsPage(), // واجهة عرض النتائج
-        '/settings': (context) => const SettingsPage(), // واجهة إعدادات النظام
-        '/deleteVoter': (context) =>
-            const DeleteVoterPage(), // واجهة حذف الناخبين
-        '/adminHome': (context) => const AdminHomePage(), // واجهة المشرف
-        '/voterHome': (context) => const VoterHomePage(), // واجهة الناخب
+        '/': (context) => const LoginPage(),
+        '/fingerprint': (context) => const FingerprintAuthPage(),
+        '/register': (context) => const VoterRegistrationPage(),
+        '/voting': (context) => const VotingPage(),
+        '/results': (context) => const ResultsPage(),
+        '/settings': (context) => const SettingsPage(),
+        '/deleteVoter': (context) => const DeleteVoterPage(),
+        '/adminHome': (context) => const AdminHomePage(),
+        '/voterHome': (context) => const VoterHomePage(),
       },
       onUnknownRoute: (settings) {
         return MaterialPageRoute(
-          builder: (context) =>
-              const LoginPage(), // إعادة توجيه إلى واجهة تسجيل الدخول
+          builder: (context) => const LoginPage(),
         );
       },
     );

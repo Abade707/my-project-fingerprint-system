@@ -49,38 +49,76 @@ class FingerprintAuthPageState extends State<FingerprintAuthPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('التحقق من البصمة')),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // خانة محاكاة للبصمة
-              Container(
-                width: 100, // عرض الخانة
-                height: 100, // ارتفاع الخانة
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade300, // لون الخلفية
-                  borderRadius: BorderRadius.circular(10), // زوايا دائرية
-                  border: Border.all(color: Colors.grey), // حد للخانة
-                ),
-                child: const Icon(
-                  Icons.fingerprint, // أيقونة بصمة
-                  size: 60, // حجم الأيقونة
-                  color: Colors.black54, // لون الأيقونة
-                ),
+      appBar: AppBar(
+        title: const Text('التحقق من البصمة'),
+        backgroundColor: Colors.blue, // تعديل لون شريط التطبيق
+      ),
+      body: Directionality(
+        textDirection: TextDirection.rtl, // لضبط الاتجاه من اليمين إلى اليسار
+        child: Container(
+          color: Colors.grey[200], // لون الخلفية
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Card(
+                    elevation: 4, // ارتفاع الظل
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.grey),
+                        ),
+                        child: const Icon(
+                          Icons.fingerprint,
+                          size: 60,
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    _authorized,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Card(
+                    elevation: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: ElevatedButton(
+                        onPressed: _authenticate,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 16, horizontal: 32),
+                        ),
+                        child: _isAuthenticating
+                            ? const Text(
+                                'جاري التحقق...',
+                                style: TextStyle(fontSize: 18),
+                              )
+                            : const Text(
+                                'تحقق من البصمة',
+                                style: TextStyle(fontSize: 18),
+                              ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 20),
-              Text(_authorized),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _authenticate,
-                child: _isAuthenticating
-                    ? const Text('جاري التحقق...')
-                    : const Text('تحقق من البصمة'),
-              ),
-            ],
+            ),
           ),
         ),
       ),

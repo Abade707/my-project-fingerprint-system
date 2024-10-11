@@ -38,53 +38,73 @@ class DeleteVoterPageState extends State<DeleteVoterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('حذف الناخبين')),
-      body: ListView.builder(
-        itemCount: voters.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-            child: Card(
-              elevation: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // الخانة الأولى للاسم
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            voters[index]['name'],
-                            style: const TextStyle(fontSize: 16),
+      appBar: AppBar(
+        title: const Text('حذف الناخبين'),
+        backgroundColor: Colors.blueAccent, // لون الشريط العلوي
+      ),
+      body: Container(
+        color: Colors.grey[200], // لون الخلفية
+        padding: const EdgeInsets.all(16.0),
+        child: voters.isEmpty
+            ? const Center(
+                child: Text(
+                  'لا يوجد ناخبين لعرضهم',
+                  style: TextStyle(fontSize: 18, color: Colors.black54),
+                ),
+              )
+            : ListView.builder(
+                itemCount: voters.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Card(
+                      color: Colors.white, // لون البطاقة
+                      elevation: 3,
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(15.0), // حواف دائرية
+                      ),
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: Colors.blueAccent,
+                          child: Text(
+                            voters[index]['name'][0], // أول حرف من الاسم
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
                           ),
-                          Text(
-                            voters[index]['national_id'] ??
-                                'رقم وطني غير متوفر',
-                            style: const TextStyle(fontSize: 14),
+                        ),
+                        title: Text(
+                          voters[index]['name'],
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
                           ),
-                          const Text(
-                            '01/01/2000 12:00', // تاريخ افتراضي مع ساعة
-                            style: TextStyle(fontSize: 12, color: Colors.grey),
-                          ),
-                        ],
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'الرقم الوطني: ${voters[index]['national_id'] ?? 'غير متوفر'}',
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                            const SizedBox(height: 5),
+                            const Text(
+                              '01/01/2000 12:00', // تاريخ افتراضي مع ساعة
+                              style:
+                                  TextStyle(fontSize: 12, color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () => _deleteVoter(voters[index]['id']),
+                        ),
                       ),
                     ),
-                    const SizedBox(width: 16), // مسافة بين الاسم والزر
-                    // زر الحذف
-                    IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () => _deleteVoter(voters[index]['id']),
-                    ),
-                  ],
-                ),
+                  );
+                },
               ),
-            ),
-          );
-        },
       ),
     );
   }

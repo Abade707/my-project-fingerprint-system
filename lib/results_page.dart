@@ -17,7 +17,6 @@ class ResultsPageState extends State<ResultsPage> {
   }
 
   void _loadResults() async {
-    // محاكاة بيانات حقيقية
     results = [
       {'name': 'أحمد محمد', 'vote_count': 12000},
       {'name': 'سارة علي', 'vote_count': 18000},
@@ -28,35 +27,99 @@ class ResultsPageState extends State<ResultsPage> {
       {'name': 'فاطمة سعيد', 'vote_count': 3000},
     ];
 
-    // إذا كنت تستخدم قاعدة البيانات، يمكنك استخدام الكود التالي
-    // List<Map<String, dynamic>> resultList =
-    //     await DatabaseHelper().getVoteResults();
-    // setState(() {
-    //   results = resultList;
-    // });
-
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('نتائج التصويت')),
-      body: SingleChildScrollView(
-        child: Center(
-          child: DataTable(
-            columns: const [
-              DataColumn(label: Text('اسم المرشح')),
-              DataColumn(label: Text('عدد الأصوات')),
-            ],
-            rows: results
-                .map(
-                  (result) => DataRow(cells: [
-                    DataCell(Text(result['name'])),
-                    DataCell(Text(result['vote_count'].toString())),
-                  ]),
-                )
-                .toList(),
+      appBar: AppBar(
+        title: const Text('نتائج التصويت'),
+        backgroundColor: Colors.blue,
+      ),
+      body: Directionality(
+        textDirection: TextDirection.rtl,
+        child: Container(
+          padding: const EdgeInsets.all(16.0),
+          color: Colors.grey[200],
+          child: Center(
+            child: Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: DataTable(
+                  headingRowColor: WidgetStateColor.resolveWith(
+                      (states) => Colors.blue.shade100),
+                  columns: const [
+                    DataColumn(
+                      label: Text(
+                        'اسم المرشح',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        'عدد الأصوات',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ],
+                  rows: results
+                      .map(
+                        (result) => DataRow(
+                          cells: [
+                            DataCell(
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Text(
+                                  result['name'],
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            DataCell(
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Text(
+                                  result['vote_count'].toString(),
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                      .toList(),
+                  border: TableBorder.all(
+                    color: Colors.blueAccent,
+                    width: 1,
+                  ),
+                  dataRowColor: WidgetStateColor.resolveWith(
+                      (states) => Colors.grey.shade50),
+                  headingTextStyle: const TextStyle(
+                    color: Colors.black87,
+                  ),
+                  dataTextStyle: const TextStyle(
+                    color: Colors.black54,
+                  ),
+                ),
+              ),
+            ),
           ),
         ),
       ),

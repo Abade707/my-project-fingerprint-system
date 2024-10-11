@@ -18,34 +18,36 @@ class VotingPageState extends State<VotingPage> {
     _loadCandidates();
   }
 
+  // تحميل المرشحين من قاعدة البيانات
   void _loadCandidates() async {
-    candidates = [
-      {'id': 1, 'name': 'أحمد محمد'},
-      {'id': 2, 'name': 'سارة علي'},
-      {'id': 3, 'name': 'يوسف حسن'},
-      {'id': 4, 'name': 'ليلى خالد'},
-      {'id': 5, 'name': 'علي حسن'},
-      {'id': 6, 'name': 'منى سمير'},
-      {'id': 7, 'name': 'فاطمة سعيد'},
-    ];
-
-    setState(() {
-      // تحديث الحالة بعد إضافة المرشحين
-    });
+    List<Map<String, dynamic>> candidateList =
+        await DatabaseHelper().getAllCandidates();
+    if (mounted) {
+      setState(() {
+        candidates = candidateList;
+      });
+    }
   }
 
+  // وظيفة التصويت
   void _vote() async {
     if (selectedCandidateId != null) {
       Map<String, dynamic> vote = {
-        'voter_id': 1, // مثال: ID الناخب
+        'voter_id': 1, // افتراضياً ID الناخب
         'candidate_id': selectedCandidateId,
       };
+
       await DatabaseHelper().insertVote(vote);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('تم التصويت بنجاح')),
         );
       }
+    } else {
+      // إذا لم يتم اختيار مرشح
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('يرجى اختيار مرشح قبل التصويت')),
+      );
     }
   }
 
@@ -64,30 +66,32 @@ class VotingPageState extends State<VotingPage> {
           child: Column(
             children: [
               Expanded(
-                child: ListView.builder(
-                  itemCount: candidates.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Card(
-                        elevation: 4,
-                        child: RadioListTile<int>(
-                          title: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Text(candidates[index]['name']),
-                          ),
-                          value: candidates[index]['id'],
-                          groupValue: selectedCandidateId,
-                          onChanged: (int? value) {
-                            setState(() {
-                              selectedCandidateId = value;
-                            });
-                          },
-                        ),
+                child: candidates.isEmpty
+                    ? const Center(child: Text('لا يوجد مرشحون حالياً'))
+                    : ListView.builder(
+                        itemCount: candidates.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Card(
+                              elevation: 4,
+                              child: RadioListTile<int>(
+                                title: Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Text(candidates[index]['name']),
+                                ),
+                                value: candidates[index]['id'],
+                                groupValue: selectedCandidateId,
+                                onChanged: (int? value) {
+                                  setState(() {
+                                    selectedCandidateId = value;
+                                  });
+                                },
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(16.0),

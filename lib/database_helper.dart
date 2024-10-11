@@ -53,43 +53,56 @@ class DatabaseHelper {
     ''');
   }
 
+  // إدخال ناخب جديد
   Future<int> insertVoter(Map<String, dynamic> voter) async {
     Database db = await database;
     return await db.insert('voters', voter);
   }
 
+  // إدخال مرشح جديد
   Future<int> insertCandidate(Map<String, dynamic> candidate) async {
     Database db = await database;
     return await db.insert('candidates', candidate);
   }
 
+  // إدخال تصويت
   Future<int> insertVote(Map<String, dynamic> vote) async {
     Database db = await database;
     return await db.insert('votes', vote);
   }
 
+  // جلب جميع الناخبين
   Future<List<Map<String, dynamic>>> getAllVoters() async {
     Database db = await database;
     return await db.query('voters');
   }
 
+  // جلب جميع المرشحين
   Future<List<Map<String, dynamic>>> getAllCandidates() async {
     Database db = await database;
     return await db.query('candidates');
   }
 
+  // جلب نتائج التصويت
   Future<List<Map<String, dynamic>>> getVoteResults() async {
     Database db = await database;
     return await db.rawQuery('''
-      SELECT candidates.name, COUNT(votes.id) as vote_count 
+      SELECT candidates.name, candidates.party, COUNT(votes.id) as vote_count 
       FROM votes 
       JOIN candidates ON votes.candidate_id = candidates.id 
-      GROUP BY candidates.name
+      GROUP BY candidates.name, candidates.party
     ''');
   }
 
+  // حذف ناخب
   Future<int> deleteVoter(int id) async {
     Database db = await database;
     return await db.delete('voters', where: 'id = ?', whereArgs: [id]);
+  }
+
+  // حذف مرشح
+  Future<int> deleteCandidate(int id) async {
+    Database db = await database;
+    return await db.delete('candidates', where: 'id = ?', whereArgs: [id]);
   }
 }
